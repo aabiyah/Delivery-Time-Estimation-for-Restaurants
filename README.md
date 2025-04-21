@@ -85,6 +85,22 @@ The core goal is to support restaurants in forecasting delivery durations by ana
 
 ---
 
+## 📸 Screenshots
+
+### 🖥️ Homepage
+![Homepage](images/web_page.png)
+
+### 🧠 Prediction Page
+![Prediction Form](images/web_prediction.png)
+
+### 📈 Analytics Dashboard (Line Chart)
+![Analytics](images/web_analytics.png)
+
+### 📊 Visualizations Dashboard (Bar Charts)
+![Visualizations](images/web_visualizations.png)
+
+---
+
 ## 👩‍💻 Authors
 
 - Aabiyah Zehra  
@@ -113,4 +129,3 @@ The core goal is to support restaurants in forecasting delivery durations by ana
 ## 📄 License
 
 This project is for academic purposes as part of the CP630 - Enterprise Computing course at Wilfrid Laurier University.
-
