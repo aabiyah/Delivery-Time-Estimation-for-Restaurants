@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Visualizations</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #ff9966, #ff5e62);
+            margin: 20px;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h2 {
+            text-align: center;
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 35px;
+            padding: 20px;
+        }
+        .gallery img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .gallery img:hover {
+            transform: scale(1.05);
+        }
+        .caption {
+            margin-top: 5px;
+            font-size: 14px;
+            color: #555;
+        }
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+        }
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 30px;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Data Visualizations</h2>
+        <div class="gallery">
+            <div>
+                <img src="images/Average_Delivery_Time_per_Market.png" alt="Average Delivery Time per Market" onclick="openLightbox(this.src)">
+                <div class="caption">Average Delivery Time per Market</div>
+            </div>
+            <div>
+                <img src="images/Delivery_Time_By_Restaurant_Category.png" alt="Delivery Time By Restaurant Category" onclick="openLightbox(this.src)">
+                <div class="caption">Delivery Time By Restaurant Category</div>
+            </div>
+            <div>
+                <img src="images/Number_Of_Orders_Per_Market.png" alt="Number Of Orders Per Market" onclick="openLightbox(this.src)">
+                <div class="caption">Number Of Orders Per Market</div>
+            </div>
+            <div>
+                <img src="images/Order_Count_by_Order_Protocol.png" alt="Order Count by Order Protocol" onclick="openLightbox(this.src)">
+                <div class="caption">Order Count by Order Protocol</div>
+            </div>
+            <div>
+                <img src="images/Top_5_Most_Popular_Restaurant_Categories.png" alt="Top 5 Most Popular Restaurant Categories" onclick="openLightbox(this.src)">
+                <div class="caption">Top 5 Most Popular Restaurant Categories</div>
+            </div>
+            <div>
+                <img src="images/Top_5_Restaurant_Categories_by_Average_Delivery_Time.png" alt="Top 5 Restaurant Categories by Average Delivery Time" onclick="openLightbox(this.src)">
+                <div class="caption">Top 5 Restaurant Categories by Average Delivery Time</div>
+            </div>
+            <div>
+                <img src="images/Top_5_Restaurant_Categories_by_Average_Order_Value.png" alt="Top 5 Restaurant Categories by Average Order Value" onclick="openLightbox(this.src)">
+                <div class="caption">Top 5 Restaurant Categories by Average Order Value</div>
+            </div>
+            <div>
+                <img src="images/Top_10_Restaurant_Categories_by_Order_Count.png" alt="Top 10 Restaurant Categories by Order Count" onclick="openLightbox(this.src)">
+                <div class="caption">Top 10 Restaurant Categories by Order Count</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="lightbox" id="lightbox">
+        <span class="close" onclick="closeLightbox()">&times;</span>
+        <img id="lightbox-img">
+    </div>
+
+    <script>
+        function openLightbox(src) {
+            document.getElementById('lightbox-img').src = src;
+            document.getElementById('lightbox').style.display = 'flex';
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery System Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #1f1c2c, #928DAB);
+            text-align: center;
+            color: white;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 70px;
+        }
+        .button-container {
+            display: flex;
+            gap: 40px;
+        }
+        .btn {
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            border: none;
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.2em;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s ease-in-out;
+            text-decoration: none;
+        }
+        .btn:hover {
+            transform: scale(1.1);
+            background: linear-gradient(45deg, #ff4b2b, #ff416c);
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to the Delivery System</h1>
+    <div class="button-container">
+        <a href="prediction.html" class="btn">Prediction Service</a>
+        <a href="analytics.html" class="btn">Analytics Service</a>
+        <a href="visualization.html" class="btn">Data Visualizations</a>
+    </div>
+</body>
+</html>

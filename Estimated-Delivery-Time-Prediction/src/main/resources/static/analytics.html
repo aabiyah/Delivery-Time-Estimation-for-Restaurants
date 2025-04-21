@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard</title>
+
+    <!-- External Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // Function to fetch analytics data from API
+        async function fetchAnalyticsData() {
+            try {
+                const trafficImpactResponse = await fetch('http://localhost:8080/api/analytics/traffic-impact');
+                const averageTimeResponse = await fetch('http://localhost:8080/api/analytics/average-time');
+                const trafficImpactData = await trafficImpactResponse.json();
+                const averageTimeData = await averageTimeResponse.json();
+
+                // Update UI with fetched data
+                // document.getElementById('traffic-impact-note').textContent = trafficImpactData.note;
+                // document.getElementById('overall-traffic-impact').textContent = `Overall Traffic Impact (Multiple Regression): ${trafficImpactData.modelBasedTrafficImpact.overallModelBasedTrafficImpact.multipleRegressionImpactRatio}`;
+                // document.getElementById('average-time').textContent = `Average Time: ${averageTimeData.modelBasedPredictions.simpleRegression.averagePredictedTimeMinutes} minutes`;
+
+                   // Populate table
+                // document.getElementById('averageTimeTable').innerHTML = `
+                //     <tr><td>Average Actual Delivery Time (Minutes)</td><td>${trafficImpactData.overallAvgActual}</td></tr>
+                //     <tr><td>Average Estimated Time (Minutes)</td><td>${trafficImpactData.overallAvgSimples}</td></tr>
+                //     <tr><td>Sample Size</td><td>${trafficImpactData.totalRecords}</td></tr>
+                // `;
+
+                // Prepare data for chart
+                const labels = [];
+                // const trafficRatios = [];
+                const avgEstimatedMinutes = [];
+                const avgActualMinutes = [];
+
+                // Extract the relevant data for charting
+                for (let key in trafficImpactData.modelBasedTrafficImpact.marketModelBasedTrafficImpact) {
+                    const model = trafficImpactData.modelBasedTrafficImpact.marketModelBasedTrafficImpact[key];
+                    labels.push(`MarketID ${key}`);
+                    // trafficRatios.push(model.simpleRegressionImpactRatio);
+                    avgEstimatedMinutes.push(model.simpleRegressionPredictionMinutes);
+                    avgActualMinutes.push(model.averageActualMinutes);
+                }
+
+                // Call the function to create the chart
+                createLineChart(labels, avgEstimatedMinutes, avgActualMinutes);
+
+            } catch (error) {
+                console.error('Error fetching analytics data:', error);
+            }
+        }
+
+        // Function to create Line Chart
+        function createLineChart(labels, avgEstimatedMinutes, avgActualMinutes) {
+            const ctx = document.getElementById('analyticsChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        // {
+                        //     label: 'Traffic Impact Ratio',
+                        //     data: trafficRatios,
+                        //     borderColor: 'rgba(54, 162, 235, 1)',
+                        //     backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        //     borderWidth: 2,
+                        //     fill: true
+                        // },
+                        {
+                            label: 'Actual Delivery Time (Minutes)',
+                            data: avgEstimatedMinutes,
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderWidth: 2,
+                            fill: true
+                        },
+                        {
+                            label: 'Estimated Delivery Time (Minutes)',
+                            data: avgActualMinutes,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderWidth: 2,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    plugins: {
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            title: {
+                                display: true,
+                                text: 'Minutes'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Call the function when the page loads
+        window.onload = fetchAnalyticsData;
+    </script>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #ff9966, #ff5e62);
+            margin: 20px;
+            padding: 20px;
+        }
+
+        /* header {
+            background: linear-gradient(to right, #1f1c2c, #928DAB);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        } */
+
+        .container {
+           
+            padding: 20px;
+        }
+
+        .section {
+            margin: auto;
+            max-width: 900px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h2 {
+            color: linear-gradient(to right, #1f1c2c, #928DAB);
+            text-transform: uppercase;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        footer {
+            background: linear-gradient(to right, #1f1c2c, #928DAB);
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        #analyticsChart {
+            max-width: 100%;
+            height: 300px;
+        }
+
+        .note {
+            font-style: italic;
+            color: #6c757d;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- <header>
+        Delivery Analytics Dashboard
+    </header> -->
+
+    <div class="container">
+        <div class="section">
+            <h2>Delivery Performance Analytics</h2>
+            <!-- <p class="note" id="traffic-impact-note"></p>
+            <p id="overall-traffic-impact"></p> -->
+            <canvas id="analyticsChart"></canvas>
+        </div>
+
+        <!-- <div class="section">
+            <h2>Average Time Prediction</h2>
+            <p id="average-time"></p>
+        </div> -->
+        <!-- <div class="section">
+        <h2>Average Delivery Time</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody id="averageTimeTable"></tbody>
+        </table>
+    </div> -->
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Time Predictor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #ff9966, #ff5e62);
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            margin-top: 20px;
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s ease-in-out;
+            text-decoration: none;
+        }
+        button:hover {
+            transform: scale(1.1);
+            background: linear-gradient(45deg, #ff4b2b, #ff416c);
+        }
+        .results {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 5px;
+            text-align: left;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Delivery Time Predictor</h2>
+        <form id="predictForm">
+            <label for="marketId">Market ID:</label>
+            <input type="number" id="marketId" required>
+            
+            <label for="category">Category:</label>
+            <input type="text" id="category" required>
+            
+            <label for="totalItems">Total Items:</label>
+            <input type="number" id="totalItems" required>
+            
+            <label for="subTotal">Sub Total:</label>
+            <input type="number" id="subTotal" required>
+            
+            <label for="distance">Driving Duration (sec):</label>
+            <input type="number" id="distance" required>
+            
+            <button type="button" onclick="getPredictions()">Predict Delivery Time</button>
+        </form>
+        <div class="results" id="results"></div>
+    </div>
+
+    <script>
+        async function getPredictions() {
+            // Get user input values
+            const marketId = parseInt(document.getElementById('marketId').value);
+            const category = document.getElementById('category').value;
+            const totalItems = parseInt(document.getElementById('totalItems').value);
+            const subtotal = parseFloat(document.getElementById('subTotal').value);
+            const drivingDuration = parseInt(document.getElementById('distance').value);
+
+            if (!marketId || !category || !totalItems || !subtotal || !drivingDuration) {
+                alert("Please fill out all fields before submitting.");
+                return;
+            }
+
+            // API endpoints for each model
+            const apiUrls = {
+                Simple: "http://localhost:8080/api/predict/simple",
+                Multiple: "http://localhost:8080/api/predict/multiple",
+                Polynomial: "http://localhost:8080/api/predict/polynomial"
+            };
+
+            const requestData = { marketId, category, totalItems, subtotal, drivingDuration };
+            let resultsHtml = "<h3>Predicted Delivery Time:</h3>";
+
+            // Loop through each model and fetch predictions
+            for (const [modelName, url] of Object.entries(apiUrls)) {
+                try {
+                    const response = await fetch(url, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(requestData)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error("Server error");
+                    }
+
+                    const data = await response.json();
+                    resultsHtml += `<p><strong>${modelName} Model:</strong> ${data.estimatedTime.toFixed(2)} minutes</p>`;
+                } catch (error) {
+                    resultsHtml += `<p class='error'><strong>${modelName} Model:</strong> Error fetching data</p>`;
+                    console.error(`Error fetching ${modelName} model:`, error);
+                }
+            }
+
+            document.getElementById("results").innerHTML = resultsHtml;
+        }
+    </script>
+</body>
+</html>
